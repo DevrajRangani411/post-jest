@@ -14,6 +14,11 @@ const findByTestAtribute =(component, atrr)=>{
     return wrapper;
 }
 
+const propTypeChecking = (component, expectedProps)=>{
+    const propsErr = checkPropTypes(component.propTypes, expectedProps, 'props', component.name);
+    return propsErr;
+}
+
 describe('Header Component',()=>{
 
 
@@ -24,7 +29,8 @@ describe('Header Component',()=>{
                 logo: 'Test'
             }
 
-            const propsErr = checkPropTypes(Header.propTypes, expectedProps, 'props', Header.name);
+            //Check Props type
+            const propsErr = propTypeChecking(Header, expectedProps);
             expect(propsErr).toBeUndefined();
         })
     })
@@ -43,5 +49,7 @@ describe('Header Component',()=>{
         const logo = findByTestAtribute(component,"logo")
         expect(logo.length).toBe(1);
     })
+
+    
 
 })

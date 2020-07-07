@@ -8,6 +8,7 @@ async function fetchData(){
                 if (response.status >= 400) {
                     throw new Error(data.errors);
                 }
+                console.log("API",data)
                 return data;
             };
 

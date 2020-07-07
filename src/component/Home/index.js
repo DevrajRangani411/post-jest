@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {getData} from "../../actions/index" 
+import SharedButton from "../Button";
+
 
 
 class Home extends Component {
@@ -9,7 +11,8 @@ class Home extends Component {
      data:null,
     email:"",
     name:"",
-    id:""
+    id:"",
+    hideBtn: false
    }
     
     componentWillMount(){
@@ -18,14 +21,12 @@ class Home extends Component {
 
     componentDidUpdate(){
    
-      if(this.state.data == null){
+      if(this.state.data === null){
         this.setState({
-          data:this.props.data
+          data:this.props.data.data
         })
       }
     }
-
-
 
   handleDelete = (res) =>{
     var data_filter = this.state.data.filter( element => element.id != res.id)
@@ -41,7 +42,7 @@ class Home extends Component {
       name:res.name,
       id:res.id
     })
-    
+    this.exampleMethod_updatesState();
   }
 
   handleName = (e) =>{
@@ -52,8 +53,6 @@ class Home extends Component {
   }
 
   handleEmail = (e) =>{   
-      
-    
     this.setState({
       email:e.target.value
     })
@@ -63,32 +62,46 @@ class Home extends Component {
 
   handleSave = (e) =>{
     e.preventDefault();
-    
     this.setState(prevState => ({
 
       data: prevState.data.map(
         el => el.id === this.state.id? { ...el, email: this.state.email, name:this.state.name}: el
       )
     
-    }))
-
+    }));
+    this.setState({email:'', name:''})
+    this.exampleMethod_updatesState();
   }
 
+  //Testing and Hide Submit button
+  exampleMethod_updatesState() {
+    const { hideBtn } = this.state;
+    this.setState({
+      hideBtn: !hideBtn
+    });
+  }
+
+  // Just for testing purpose
+  exampleMethod_returnsAValue(number) {
+    return number + 1;
+  }
   
     
   render() {
 
     const data = this.state.data;
-    console.log("HOME",data);
+    const hideBtn = this.state.hideBtn;
+    // console.log("HOME",data);
+
     return (
     
-      <div >
+      <div data-test="homeComponent">
         <br></br>
-        <div className="container" data-test="home">
-          <div className="row">
+        <div className="container" >
               <h2 data-test='heading'>{this.props.heading}</h2>
-            <div className="col-6">
-              <form data-test='form'>
+          <div className="row">
+            <div className="col-6 mx-auto">
+              <form data-test='updateForm'>
               
                 <div className="form-group">
                   <label >Name</label>
@@ -115,11 +128,11 @@ class Home extends Component {
                    
                  
                 </div>
-                
-      
+                {hideBtn &&
                 <button type="submit" className="btn btn-primary" onClick={(e)=>this.handleSave(e)}>
                   Submit
                 </button>
+                   }
               </form>
             </div>
           </div>
@@ -140,14 +153,16 @@ class Home extends Component {
     </tr>
   </thead>
   <tbody>
-    { data ? (data.map(res=>{
+    { data != null ? (data.map(res=>{
       return(
         <tr key={res.id}>
       <th scope="row">{res.id}</th>
       <td>{res.name}</td>
       <td>{res.email}</td>
-      <td><button className="btn btn-success" onClick={()=>{this.handleEdit(res)}}>Edit</button></td>
-      <td><button className="btn btn-danger" onClick={()=>{this.handleDelete(res)}}>Delete</button></td>
+      <td><SharedButton buttonText="Edit" buttonStyle="btn-success" emitEvent={()=>this.handleEdit(res)} />
+        {/* <button className="btn btn-success" onClick={()=>{this.handleEdit(res)}}>Edit</button> */}
+        </td>
+      <td><SharedButton buttonText="Delete" buttonStyle="btn-danger" emitEvent={()=>this.handleDelete(res)} /></td>
     </tr>
       )
     })) : null }
@@ -169,6 +184,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     getData: () => dispatch(getData())
+
 })
    
 

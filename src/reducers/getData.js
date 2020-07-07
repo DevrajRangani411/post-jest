@@ -1,7 +1,7 @@
 import {GET_DATA_SUCCESS} from "../actionTypes/index"
 
 export const INTIAL_STATE={
-    data: null
+    
 }
 
 export default (state=INTIAL_STATE, action)=>{
@@ -10,9 +10,10 @@ export default (state=INTIAL_STATE, action)=>{
     switch(action.type){
        
         case GET_DATA_SUCCESS: 
+        console.log("DATA",action.payload)
             return{
                 ...state,
-                data: action.payload.data
+                data: action.payload
             }
         default :
             return state;

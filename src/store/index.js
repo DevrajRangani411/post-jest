@@ -1,14 +1,17 @@
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import {rootReducer}  from "../reducers/index"
+import thunk from 'redux-thunk'
 
 import rootSaga  from '../saga/index'
 
-export const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware()
+
+export const middleware=[sagaMiddleware,thunk];
 
 export const store = createStore(
   rootReducer,
-  applyMiddleware(sagaMiddleware)
+  applyMiddleware(...middleware)
 )
 sagaMiddleware.run(rootSaga)
 
