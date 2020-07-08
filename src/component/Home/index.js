@@ -141,7 +141,7 @@ class Home extends Component {
         <br></br>
 
         <div className="row">
-            <div className="col-9">
+            <div className="col-9 mx-auto">
             <table className="table">
   <thead>
     <tr>
